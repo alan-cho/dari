@@ -23,12 +23,16 @@ Each stage maps to one harness responsibility; build them incrementally:
 
 ## Commands
 
-Not yet scaffolded. Once a Go module exists, use the standard toolchain:
-
-- Build: `go build ./...`
-- Run: `go run .` (requires `ANTHROPIC_API_KEY` in the environment)
-- Test all: `go test ./...`
-- Single test: `go test ./path/to/pkg -run TestName`
+- Run against Claude: `go run ./harness` (needs `ANTHROPIC_API_KEY`; model defaults to `claude-opus-5-5`, override with `DARI_MODEL`)
+- Run against a local model (free, for testing): `ANTHROPIC_BASE_URL=http://localhost:11434 ANTHROPIC_API_KEY=ollama DARI_MODEL=<ollama-model> go run ./harness` — Ollama (`brew services start ollama`) serves an Anthropic-compatible `/v1/messages`, so the same SDK code works unchanged.
+- Build: `go build -o dari ./harness`
+- Test all: `go test ./...`; single test: `go test ./harness/tools -run TestName`
 - Lint/format: `go vet ./...` and `gofmt -l .`
 
-Update this section and add an architecture section once the code layout exists.
+## Architecture
+
+- `harness/main.go` — REPL: reads a line, calls `Agent.Send`, prints errors. Wires the client, tool registry, and system prompt together.
+- `harness/agent` — the harness loop. `Agent` owns the full `messages` history (the API is stateless; everything is resent each call). `Send` appends the user turn, then loops: call the model → append `resp.ToParam()` → run every `tool_use` block → send all `tool_result`s back in **one** user message → repeat until `StopReason` is not `tool_use`. Capped by `maxIterations`.
+- `harness/tools` — `Tool` interface (`Name`, `Definition`, `Run`) plus a `Registry` that dispatches by name and produces the `Tools` param in stable order (keeps the prompt prefix cacheable). Tool errors are returned to the model as `is_error` results, not treated as fatal. To add a tool: implement `Tool` and register it in `harness/main.go`.
+
+Uses the Messages API directly (manual loop), not the SDK's `BetaToolRunner` — owning the loop is the point of the project. Model: `claude-opus-5-5`.
