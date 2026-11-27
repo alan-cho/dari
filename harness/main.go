@@ -1,25 +1,28 @@
 package main
 
 import (
+	"dari/harness/agent/parser"
 	"os"
 
 	"github.com/anthropics/anthropic-sdk-go/v2"
+	"github.com/anthropics/anthropic-sdk-go/v2/option"
 )
 
-
 func main() {
-	client := anthropic.NewClient()
+	key := os.Getenv("LLM_API_KEY")
 	model := os.Getenv("MODEL")
+	client := anthropic.NewClient(
+		option.WithAPIKey(key),
+	)
 
-	/*
-	While Loop
-	1. Take user input
-	2. Add to transcript
-	3. Send to API
-	4. Check stop_reason
-	5. Determine next steps based on stop_reason
-	*/
+	scanner := parser.InitScanner()
+
+	var transcript []string
+
 	for {
-
+		message := agent.parser.CreateMessage()
+		// add to transcript through conversation.go
+		// send to model through agent client
+		// determine next steps based on model response
 	}
 }

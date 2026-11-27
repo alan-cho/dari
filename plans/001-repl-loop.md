@@ -52,6 +52,8 @@ Run a terminal chat in which each user line is sent to the model with the full c
 
 - [2026-11-26] - Start with the REPL loop only, without tools: `keep the first milestone small enough to understand end to end before adding agent behavior`
 - [2026-11-26] - The user handwrites the implementation and Claude reviews it: `the project's goal is learning how a harness works, not shipping code`
+- [2026-11-26] - The terminal input reader is separate from SDK conversion and returns a plain string: `keep terminal I/O independent of SDK types; slash commands and richer input types are deferred until needed`
+- [2026-11-26] - Defer deciding which package owns SDK conversion: `decide when the conversion logic exists and its shape is known`
 
 ## Work Breakdown
 
