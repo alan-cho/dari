@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 
 	"dari/harness/agent"
 	"dari/harness/agent/parser"
@@ -28,6 +30,7 @@ func run(ctx context.Context) error {
 	}
 	scanner := parser.InitScanner()
 	var transcript []anthropic.MessageParam
+	var previousTotal int64
 	for {
 		fmt.Print(prompt)
 		input, err := parser.ParseInput(scanner)
@@ -42,12 +45,30 @@ func run(ctx context.Context) error {
 			continue
 		}
 
-		updated, reply, err := agent.Send(ctx, client, transcript, input)
+		updated, reply, turn, err := agent.Send(ctx, client, transcript, input)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			continue
 		}
 		transcript = updated
 		fmt.Println(reply)
+		fmt.Println(formatUsage(agent.MessageInput(turn, previousTotal), turn.Output, agent.Total(turn)))
+		previousTotal = agent.Total(turn)
 	}
+}
+
+func formatUsage(input, output, total int64) string {
+	return fmt.Sprintf("[input %s · output %s | total %s]", groupDigits(input), groupDigits(output), groupDigits(total))
+}
+
+func groupDigits(n int64) string {
+	digits := strconv.FormatInt(n, 10)
+	var grouped strings.Builder
+	for i, digit := range digits {
+		if i > 0 && (len(digits)-i)%3 == 0 {
+			grouped.WriteByte(',')
+		}
+		grouped.WriteRune(digit)
+	}
+	return grouped.String()
 }

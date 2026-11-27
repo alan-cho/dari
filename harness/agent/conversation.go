@@ -13,16 +13,16 @@ import (
 
 const maxTokens = 4096
 
-func Send(ctx context.Context, client Client, transcript []anthropic.MessageParam, input string) ([]anthropic.MessageParam, string, error) {
+func Send(ctx context.Context, client Client, transcript []anthropic.MessageParam, input string) ([]anthropic.MessageParam, string, Usage, error) {
 	request := append(slices.Clone(transcript), anthropic.NewUserMessage(anthropic.NewTextBlock(input)))
 	message, err := client.api.Messages.New(ctx, newParams(client.model, request))
 	if err != nil {
-		return transcript, "", herrors.New(herrors.APIRequest, err)
+		return transcript, "", Usage{}, herrors.New(herrors.APIRequest, err)
 	}
 	if err := checkStopReason(message.StopReason); err != nil {
-		return transcript, "", err
+		return transcript, "", Usage{}, err
 	}
-	return append(request, message.ToParam()), replyText(message), nil
+	return append(request, message.ToParam()), replyText(message), usageFrom(message.Usage), nil
 }
 
 func newParams(model string, messages []anthropic.MessageParam) anthropic.MessageNewParams {
