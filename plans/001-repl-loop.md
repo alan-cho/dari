@@ -54,13 +54,16 @@ Run a terminal chat in which each user line is sent to the model with the full c
 - [2026-11-26] - The user handwrites the implementation and Claude reviews it: `the project's goal is learning how a harness works, not shipping code`
 - [2026-11-26] - The terminal input reader is separate from SDK conversion and returns a plain string: `keep terminal I/O independent of SDK types; slash commands and richer input types are deferred until needed`
 - [2026-11-26] - Defer deciding which package owns SDK conversion: `decide when the conversion logic exists and its shape is known`
+- [2026-11-27] - Claude writes the implementation instead of reviewing handwritten code: `the user changed their mind about the collaboration style`
+- [2026-11-27] - The SDK call and transcript live in `agent` as pure functions, and `main` owns the transcript slice: `resolves the deferred ownership decision; keeps parser free of SDK types and keeps conversation state explicit`
+- [2026-11-27] - A failed turn returns the previous transcript unchanged: `a turn either lands in the transcript completely or not at all, so a retry never leaves a dangling user message`
 
 ## Work Breakdown
 
 | #   | Task                                                    | Completed |
 | --- | ------------------------------------------------------- | --------- |
-| 1   | Read user input line by line, exit cleanly on EOF       | `NO`      |
-| 2   | Hold the conversation transcript across turns           | `NO`      |
-| 3   | Send the transcript to the model and receive the reply  | `NO`      |
-| 4   | Handle stop reasons and API errors                      | `NO`      |
-| 5   | Print the reply and return to the prompt                | `NO`      |
+| 1   | Read user input line by line, exit cleanly on EOF       | `YES`     |
+| 2   | Hold the conversation transcript across turns           | `YES`     |
+| 3   | Send the transcript to the model and receive the reply  | `YES`     |
+| 4   | Handle stop reasons and API errors                      | `YES`     |
+| 5   | Print the reply and return to the prompt                | `YES`     |

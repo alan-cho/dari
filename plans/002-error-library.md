@@ -57,4 +57,4 @@ Define one error type for the harness so every package reports failures with a s
 | 1   | Define the error type and code type               | `YES`     |
 | 2   | Define the initial set of codes and descriptions  | `YES`     |
 | 3   | Translate input reading errors in the parser      | `YES`     |
-| 4   | Branch on codes in `main.go`                      | `NO`      |
+| 4   | Branch on codes in `main.go`                      | `YES`     |
