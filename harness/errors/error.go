@@ -11,8 +11,8 @@ type Error struct {
 	Cause error
 }
 
-func New(code Code, op string, cause error) error {
-	return &Error{Code: code, Op: op, Cause: cause}
+func New(code Code, cause error) error {
+	return &Error{Code: code, Op: callerOp(1), Cause: cause}
 }
 
 func (e *Error) Description() string {

@@ -48,6 +48,7 @@ Define one error type for the harness so every package reports failures with a s
 - [2026-11-27] - Codes are a named string type (`type Code string`): `codes stay readable when printed and are safe to add or reorder`
 - [2026-11-27] - Descriptions are fixed per code in a single lookup table: `one source of truth keeps messages consistent across call sites`
 - [2026-11-27] - The original error is kept as a `Cause` field and exposed through `Unwrap()`: `translate errors without swallowing them, so details like HTTP status remain available through errors.Is and errors.As`
+- [2026-11-27] - Op is derived automatically from the caller of `New` via `runtime.Caller`, shortened to `package.Function`: `removes a hand-written op string from every function; op is a property of the code, not the request, so it does not belong in context.Context`
 
 ## Work Breakdown
 
@@ -55,5 +56,5 @@ Define one error type for the harness so every package reports failures with a s
 | --- | ------------------------------------------------- | --------- |
 | 1   | Define the error type and code type               | `YES`     |
 | 2   | Define the initial set of codes and descriptions  | `YES`     |
-| 3   | Translate input reading errors in the parser      | `NO`      |
+| 3   | Translate input reading errors in the parser      | `YES`     |
 | 4   | Branch on codes in `main.go`                      | `NO`      |
