@@ -6,9 +6,7 @@
 
 `[PLAN-NUMBER]-[PLAN-TITLE].md`
 
-Status: 
-
-- Types: \[`DRAFT`, `IN PROGRESS`, `COMPLETED`\]
+Status: Types: \[`DRAFT`, `IN PROGRESS`, `COMPLETED`\]
 
 Date:
 
@@ -16,7 +14,7 @@ Date:
 
 *Simply state the objective of the proposed work in one or two sentences.*
 
-## sOut of Scope
+## Out of Scope
 
 *Explicit criteria that defines what scope is not within the plan's work. Rigorously contain scope and/or avoid scope creep.*
 

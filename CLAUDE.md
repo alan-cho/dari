@@ -10,7 +10,7 @@ Modular, pure functions are most preferred. Never comment, if they are not maint
 
 ## Collaboration Style
 
-The user is learning by building. Do not uplift or build major files without interaction from the user. Leave sections for implementation through `TODO`.
+The user is learning by building. Do not uplift or build without interaction from the user. Leave majority of the implementation to the user unless there is pushback.
 
 Whenever there is an opportunity to implement or refactor code into a popular system design, then always propose relevant architectural designs when applicable. Prioritize systems that can be explained from reliable sources like: [https://learn.microsoft.com/en-us/azure/architecture/](https://learn.microsoft.com/en-us/azure/architecture/). The domain is irrelevant, if the design pattern is suitable for the specific use-case, propose it. This can range from APIs, databases, software design, etc.
 
