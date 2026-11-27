@@ -1,4 +1,10 @@
-# Plan Title:
+# Plan: \[`PLAN TITLE`\]
+
+*Name the plan title short and explicit.* 
+
+*Follow this structure for the file name:* 
+
+`[PLAN-NUMBER]-[PLAN-TITLE].md`
 
 Status: 
 
@@ -8,7 +14,15 @@ Date:
 
 ## Goal
 
-*Simply state the objective of the proposed work.*
+*Simply state the objective of the proposed work in one or two sentences.*
+
+## sOut of Scope
+
+*Explicit criteria that defines what scope is not within the plan's work. Rigorously contain scope and/or avoid scope creep.*
+
+*Follow this structure:*
+
+- \[`CRITERIA`\]
 
 ## Context
 
@@ -37,7 +51,7 @@ Date:
 
 ## Work Breakdown
 
-*Break down implementation plan into general groupings of work. Do not create detailed descriptions of the task.s* 
+*Break down implementation plan into general groupings of work. Do not create detailed descriptions of the tasks.*
 
 
 | #             | Task                  | Completed    |
