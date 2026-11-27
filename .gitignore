@@ -1,3 +1,5 @@
 .env
 .ollama.log
 .ollama.pid
+.bin/
+.logs/
