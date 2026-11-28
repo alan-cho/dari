@@ -20,4 +20,4 @@ TBD
 
 ## Documentation
 
-Plans will live with `/plans` directory. It contains architectural or implementation decisions over various features that are added to the repository. When implementing a feature, refer to the `/plans` directory to search for an already decided design. Especially if it is explicitly mentioned by the user. 
+Plans will live with `/plans` directory. It contains architectural or implementation decisions over various features that are added to the repository. When implementing a feature, refer to the `/plans` directory to search for an already decided design. Especially if it is explicitly mentioned by the user. Once all the work listed under `WORK BREAKDOWN` are completed, then mark the plan's status as `COMPLETE`. 

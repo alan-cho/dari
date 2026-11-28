@@ -6,29 +6,45 @@ import (
 	"slices"
 	"strings"
 
+	"dari/harness/api"
 	herrors "dari/harness/errors"
 
 	"github.com/anthropics/anthropic-sdk-go/v2"
 )
 
-const maxTokens = 4096
-
-func Send(ctx context.Context, client Client, transcript []anthropic.MessageParam, input string) ([]anthropic.MessageParam, string, error) {
-	request := append(slices.Clone(transcript), anthropic.NewUserMessage(anthropic.NewTextBlock(input)))
-	message, err := client.api.Messages.New(ctx, newParams(client.model, request))
+func Send(ctx context.Context, client Client, transcript []api.Message, input string) ([]api.Message, string, api.Usage, error) {
+	request := append(slices.Clone(transcript), api.Message{Role: api.User, Text: input})
+	message, err := client.api.Messages.New(ctx, newParams(client, toParams(request)))
 	if err != nil {
-		return transcript, "", herrors.New(herrors.APIRequest, err)
+		return transcript, "", api.Usage{}, herrors.New(herrors.APIRequest, err)
 	}
 	if err := checkStopReason(message.StopReason); err != nil {
-		return transcript, "", err
+		return transcript, "", api.Usage{}, err
 	}
-	return append(request, message.ToParam()), replyText(message), nil
+	reply := replyText(message)
+	return append(request, api.Message{Role: api.Assistant, Text: reply}), reply, usageFrom(message.Usage), nil
 }
 
-func newParams(model string, messages []anthropic.MessageParam) anthropic.MessageNewParams {
+func toParams(messages []api.Message) []anthropic.MessageParam {
+	params := make([]anthropic.MessageParam, 0, len(messages))
+	for _, message := range messages {
+		params = append(params, toParam(message))
+	}
+	return params
+}
+
+func toParam(message api.Message) anthropic.MessageParam {
+	block := anthropic.NewTextBlock(message.Text)
+	if message.Role == api.Assistant {
+		return anthropic.NewAssistantMessage(block)
+	}
+	return anthropic.NewUserMessage(block)
+}
+
+func newParams(client Client, messages []anthropic.MessageParam) anthropic.MessageNewParams {
 	return anthropic.MessageNewParams{
-		Model:     model,
-		MaxTokens: maxTokens,
+		Model:     client.model,
+		MaxTokens: client.maxTokens,
 		Messages:  messages,
 	}
 }

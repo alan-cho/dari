@@ -1,6 +1,6 @@
 # Plan: Error Library
 
-Status: `DRAFT`
+Status: `COMPLETE`
 
 Date: 2026-11-27
 
